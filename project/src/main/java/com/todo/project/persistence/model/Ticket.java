@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "tickets")
 public class Ticket {
