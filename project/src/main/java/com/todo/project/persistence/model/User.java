@@ -18,13 +18,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 public class User {
-    // TODO: add user fields
-    // TODO: add all necessary other domains as classes in the domain package
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "firstName")

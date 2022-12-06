@@ -2,6 +2,7 @@ package com.todo.project.persistence.model;
 
 import javax.persistence.*;
 
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -12,12 +13,10 @@ import java.util.Date;
 @Entity
 @Table(name = "tickets")
 public class Ticket {
-    // TODO:
-    // Crate ticket domain
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id")
     private Long id;
 
     @OneToOne

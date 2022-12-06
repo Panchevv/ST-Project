@@ -1,13 +1,15 @@
 package com.todo.project.service;
 
 import com.todo.project.persistence.model.Ticket;
+import com.todo.project.persistence.model.User;
+
 import java.util.List;
 
 public interface TicketService {
 
-    Ticket createTicket();
+    void createTicket(Ticket ticket, User createdBy);
 
-    Ticket updateTicket();
+    void updateTicket(Ticket ticket);
 
     List<Ticket> findTickets(Integer userId);
 
