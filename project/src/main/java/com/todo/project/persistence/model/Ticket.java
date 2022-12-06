@@ -1,18 +1,16 @@
 package com.todo.project.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Data
 @Entity
-@Table(name = "TICKET")
+@Table(name = "tickets")
 public class Ticket {
     // TODO:
     // Crate ticket domain
@@ -21,4 +19,17 @@ public class Ticket {
     @Setter(AccessLevel.NONE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name="creator")
+    private User creator;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "dueDate")
+    private Date dueDate;
 }

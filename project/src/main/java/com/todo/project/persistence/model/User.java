@@ -6,13 +6,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+
+
+import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
 @Data
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     // TODO: add user fields
     // TODO: add all necessary other domains as classes in the domain package
@@ -23,4 +27,30 @@ public class User {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
+    @Column(name = "firstName")
+    @NotNull
+    private String firstName;
+
+    @Column(name = "lastName")
+    @NotNull
+    private String lastName;
+
+    @Column(name = "session_token")
+    private String sessionToken;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email", unique = true)
+    @NotNull
+    private String email;
+
+    public User() {}
+
+    public User(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 }
