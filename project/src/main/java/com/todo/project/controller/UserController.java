@@ -112,4 +112,15 @@ public class UserController {
         userService.createUser(user);
         return new ResponseEntity<>("Logout successful", HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> delete(Long id){
+        User toBeDeleted = userService.findUser(id);
+        if(toBeDeleted == null){
+            return new ResponseEntity<>("Incorrect id", HttpStatus.NOT_FOUND);
+        }
+        userService.deleteUser(toBeDeleted);
+        return new ResponseEntity<>("User with id: " + toBeDeleted.getId() + "deleted", HttpStatus.OK);
+    }
+
 }

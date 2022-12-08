@@ -1,18 +1,14 @@
 package com.todo.project.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import javax.persistence.*;
 
 
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Data
 @Entity
@@ -42,6 +38,9 @@ public class User {
     @Column(name = "email", unique = true)
     @NotNull
     private String email;
+
+    @OneToMany(mappedBy = "users")
+    private Set<Ticket> tickets;
 
     public User() {}
 
