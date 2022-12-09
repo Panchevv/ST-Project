@@ -3,6 +3,7 @@ package com.todo.project.persistence.model;
 import javax.persistence.*;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -19,8 +20,9 @@ public class Ticket {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="creator")
+    @JsonBackReference
     private User creator;
 
     @Column(name = "description")
@@ -31,4 +33,5 @@ public class Ticket {
 
     @Column(name = "dueDate")
     private Date dueDate;
+
 }

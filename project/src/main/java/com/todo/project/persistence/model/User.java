@@ -3,6 +3,7 @@ package com.todo.project.persistence.model;
 import javax.persistence.*;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -39,7 +40,8 @@ public class User {
     @NotNull
     private String email;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "creator")
+    @JsonManagedReference
     private Set<Ticket> tickets;
 
     public User() {}
