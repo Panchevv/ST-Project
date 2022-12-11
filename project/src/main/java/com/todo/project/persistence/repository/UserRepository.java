@@ -5,16 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UserRepository{
-    List<User> get();
 
-    User get(int id);
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    User get(String username);
+    User findUserByEmail(String email);
 
-    void create(User user);
+    User findUserById(Long id);
 
-    void update(User user);
+    List<User> findUserByFirstNameAndLastName(String firstName, String lastName);
 
-    void delete(User user);
+    User findUserBySessionToken(String sessionToken);
 }
