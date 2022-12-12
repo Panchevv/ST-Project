@@ -5,8 +5,11 @@ import com.todo.project.persistence.model.Ticket;
 import com.todo.project.persistence.model.User;
 import com.todo.project.persistence.repository.TicketRepository;
 import com.todo.project.service.TicketService;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
@@ -16,23 +19,31 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void createTicket(Ticket ticket, User createdBy) {
+    public void createTicket(Ticket ticket) {
 
-        ticketRepository.create(ticket);
+        ticketRepository.save(ticket);
     }
 
     @Override
     public void updateTicket(Ticket ticket) {
-        ticketRepository.update(ticket);
+        if(ticket.getId() == null){
+            throw new EntityNotFoundException("Ticket", ticket.getId());
+        }
+        ticketRepository.save(ticket);
     }
 
     @Override
-    public List<Ticket> findTickets(Integer userId) { //?
-        return null;
+    public List<Ticket> findTicketsByCreator(Long userId) {
+        return ticketRepository.findTicketByCreator(userId);
     }
 
     @Override
-    public Ticket saveTicker(Ticket ticket) { //?
-        return null;
+    public Ticket findTicketById(Long ticketId){
+        return ticketRepository.findTicketById(ticketId);
+    }
+
+    @Override
+    public List<Ticket> getAllTickets(){
+        return ticketRepository.findAll();
     }
 }

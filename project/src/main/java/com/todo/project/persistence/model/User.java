@@ -40,6 +40,10 @@ public class User {
     @NotNull
     private String email;
 
+    @Column(name = "is_admin")
+    @NotNull
+    private Boolean isAdmin;
+
     @OneToMany(mappedBy = "creator")
     @JsonManagedReference
     private Set<Ticket> tickets;

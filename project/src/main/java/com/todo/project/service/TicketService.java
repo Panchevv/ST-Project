@@ -7,12 +7,14 @@ import java.util.List;
 
 public interface TicketService {
 
-    void createTicket(Ticket ticket, User createdBy);
+    void createTicket(Ticket ticket);
 
     void updateTicket(Ticket ticket);
 
-    List<Ticket> findTickets(Integer userId);
+    List<Ticket> findTicketsByCreator(Long userId);
 
-    Ticket saveTicker(Ticket ticket);
+    Ticket findTicketById(Long ticketId);
+
+    List<Ticket> getAllTickets();
 
 }

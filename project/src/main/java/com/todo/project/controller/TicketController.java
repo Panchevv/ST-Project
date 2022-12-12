@@ -1,14 +1,49 @@
 package com.todo.project.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.todo.project.payload.response.TicketResponse;
+import com.todo.project.persistence.model.Ticket;
+import com.todo.project.service.TicketService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/ticket")
 public class TicketController {
+    private final TicketService ticketService;
+
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
+
+    @GetMapping("/fetch")
+    public ResponseEntity<?> getAllTickets(){
+        List<Ticket> tickets = ticketService.getAllTickets();
+        List<TicketResponse> result = new ArrayList<>();
+
+        for(Ticket ticket: tickets){
+            TicketResponse ticketResponse = new TicketResponse();
+            ticketResponse.setCreator(ticket.getCreator());
+            ticketResponse.setTitle(ticket.getTitle());
+            ticketResponse.setDescription(ticket.getDescription());
+            ticketResponse.setDueDate(ticket.getDueDate());
+
+            result.add(ticketResponse);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> findTicketById(Long id){
+        Ticket ticket = ticketService.findTicketById(id);
+        if(ticket == null){
+            return new ResponseEntity<>("Incorrect id.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(ticket,HttpStatus.OK);
+    }
 
     @PostMapping
     public void createTicket() {
