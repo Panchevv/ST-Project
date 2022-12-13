@@ -12,6 +12,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long>{
 
     List<Ticket> findTicketByCreator(Long userId);
 
+    Ticket findTicketByTitle(String title);
 }
 
 

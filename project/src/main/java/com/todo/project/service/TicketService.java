@@ -11,10 +11,15 @@ public interface TicketService {
 
     void updateTicket(Ticket ticket);
 
+    void deleteTicket(Ticket ticket);
+
     List<Ticket> findTicketsByCreator(Long userId);
 
     Ticket findTicketById(Long ticketId);
 
     List<Ticket> getAllTickets();
 
+    Ticket findTicketByTitle(String title);
+
+    String checkTitle(String title);
 }

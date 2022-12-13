@@ -33,6 +33,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public void deleteTicket(Ticket ticket){
+        ticketRepository.delete(ticket);
+    }
+
+    @Override
     public List<Ticket> findTicketsByCreator(Long userId) {
         return ticketRepository.findTicketByCreator(userId);
     }
@@ -45,5 +50,19 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> getAllTickets(){
         return ticketRepository.findAll();
+    }
+
+    @Override
+    public Ticket findTicketByTitle(String title){
+        return ticketRepository.findTicketByTitle(title);
+    }
+
+    @Override
+    public String checkTitle(String title){
+        String message = "";
+        if(title == null || title.equals("")){
+            message = "Title must not be empty";
+        }
+        return message;
     }
 }

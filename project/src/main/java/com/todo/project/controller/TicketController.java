@@ -1,8 +1,12 @@
 package com.todo.project.controller;
 
+import com.todo.project.payload.request.TicketRequest;
 import com.todo.project.payload.response.TicketResponse;
 import com.todo.project.persistence.model.Ticket;
+import com.todo.project.persistence.model.User;
 import com.todo.project.service.TicketService;
+import com.todo.project.service.UserService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +18,11 @@ import java.util.List;
 @RequestMapping("/v1/ticket")
 public class TicketController {
     private final TicketService ticketService;
+    private final UserService userService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, UserService userService) {
         this.ticketService = ticketService;
+        this.userService = userService;
     }
 
     @GetMapping("/fetch")
@@ -45,22 +51,72 @@ public class TicketController {
         return new ResponseEntity<>(ticket,HttpStatus.OK);
     }
 
-    @PostMapping
-    public void createTicket() {
-        // TODO:
-        // Receive ticket object in the body and save it in the database
+    @PostMapping("/create")
+    public ResponseEntity<?> createTicket(@RequestBody TicketRequest ticketRequest,@RequestHeader("session-token") String sessionToken) {
+        User creator = userService.findUser(sessionToken);
+        if(creator == null){
+            return new ResponseEntity<>("Incorrect sessionToken", HttpStatus.BAD_REQUEST);
+        }
+        if(!ticketRequest.getCreator().getId().equals(creator.getId())){
+            return new ResponseEntity<>("Cannot create tickets to other users", HttpStatus.BAD_REQUEST);
+        }
+        if(!ticketService.checkTitle(ticketRequest.getTitle()).equals("")){
+            return new ResponseEntity<>(ticketService.checkTitle(ticketRequest.getTitle()), HttpStatus.BAD_REQUEST);
+        }
+        if(ticketService.findTicketByTitle(ticketRequest.getTitle()) != null){
+            return new ResponseEntity<>("Title already in use", HttpStatus.BAD_REQUEST);
+        }
+        try{
+            Ticket ticket = new Ticket(
+                    creator,
+                    ticketRequest.getTitle(),
+                    ticketRequest.getDescription(),
+                    ticketRequest.getDueDate()
+            );
+            ticketService.createTicket(ticket);
+            return new ResponseEntity<>("Creation successful", HttpStatus.OK);
+        }
+        catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PostMapping
-    public void deleteTicker(@RequestParam Integer id) {
-        // TODO:
-        // Delete the ticket whic id we have recieved as parameter
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteTicket(@RequestParam Long id, @RequestHeader("session-token") String sessionToken) {
+        User creator = userService.findUser(sessionToken);
+        if(creator == null){
+            return new ResponseEntity<>("Incorrect sessionToken", HttpStatus.BAD_REQUEST);
+        }
+        Ticket toBeDeleted = ticketService.findTicketById(id);
+        if(toBeDeleted == null){
+            return new ResponseEntity<>("Incorrect id", HttpStatus.NOT_FOUND);
+        }
+        if(!id.equals(creator.getId())){
+            return new ResponseEntity<>("You can delete only your tickets", HttpStatus.BAD_REQUEST);
+        }
+        ticketService.deleteTicket(toBeDeleted);
+        return new ResponseEntity<>("Ticket with id: " + toBeDeleted.getId() + " deleted", HttpStatus.OK);
     }
 
     @PutMapping
-    public void updateTicker() {
-        // TODO:
-        // Change the ticket values
+    public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest, @RequestHeader("session-token") String sessionToken) {
+        User creator = userService.findUser(sessionToken);
+        if(creator == null){
+            return new ResponseEntity<>("Incorrect sessionToken", HttpStatus.BAD_REQUEST);
+        }
+        if(!ticketRequest.getCreator().getId().equals(creator.getId())){
+            return new ResponseEntity<>("You can update only your tickets", HttpStatus.BAD_REQUEST);
+        }
+        Ticket ticket = ticketService.findTicketByTitle(ticketRequest.getTitle());
+        try{
+            ticket.setDescription(ticketRequest.getDescription());
+            ticket.setDueDate(ticketRequest.getDueDate());
+            ticketService.updateTicket(ticket);
+            return new ResponseEntity<>("Ticket is saved", HttpStatus.OK);
+        }
+        catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

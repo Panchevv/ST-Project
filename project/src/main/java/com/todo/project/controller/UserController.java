@@ -122,11 +122,22 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest){
         User user = userService.findUserByEmail(userRequest.getEmail());
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setPassword(userRequest.getPassword());
-        userService.updateUser(user);
-        return new ResponseEntity<>("User is saved", HttpStatus.OK);
+        if(user.getSessionToken() == null){
+            return new ResponseEntity<>("Log in to update user", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            user.setFirstName(userRequest.getFirstName());
+            user.setLastName(userRequest.getLastName());
+            user.setPassword(userRequest.getPassword());
+            if(!userService.checkUser(user).equals("")){
+                return new ResponseEntity<>(userService.checkUser(user), HttpStatus.BAD_REQUEST);
+            }
+            userService.updateUser(user);
+            return new ResponseEntity<>("User is saved", HttpStatus.OK);
+        }
+        catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/login")
