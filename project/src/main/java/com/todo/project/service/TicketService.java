@@ -13,7 +13,7 @@ public interface TicketService {
 
     void deleteTicket(Ticket ticket);
 
-    List<Ticket> findTicketsByCreator(Long userId);
+    List<Ticket> findTicketsByCreator(User user);
 
     Ticket findTicketById(Long ticketId);
 

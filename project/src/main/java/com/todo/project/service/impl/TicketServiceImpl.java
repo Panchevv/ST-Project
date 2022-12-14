@@ -38,8 +38,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> findTicketsByCreator(Long userId) {
-        return ticketRepository.findTicketByCreator(userId);
+    public List<Ticket> findTicketsByCreator(User user) {
+        return ticketRepository.findTicketByCreator(user);
     }
 
     @Override

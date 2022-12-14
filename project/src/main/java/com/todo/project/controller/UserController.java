@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
@@ -128,7 +129,7 @@ public class UserController {
         try {
             user.setFirstName(userRequest.getFirstName());
             user.setLastName(userRequest.getLastName());
-            user.setPassword(userRequest.getPassword());
+            user.setPassword(userService.encode(userRequest.getPassword()));
             if(!userService.checkUser(user).equals("")){
                 return new ResponseEntity<>(userService.checkUser(user), HttpStatus.BAD_REQUEST);
             }
@@ -189,7 +190,10 @@ public class UserController {
         if(user == null){
             return new ResponseEntity<>("Incorrect sessionToken.", HttpStatus.BAD_REQUEST);
         }
-        List<Ticket> tickets = ticketService.findTicketsByCreator(user.getId());
+        List<Ticket> tickets = ticketService.findTicketsByCreator(user);
+        if(tickets.isEmpty()){
+            return new ResponseEntity<>("No tickets", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
 }

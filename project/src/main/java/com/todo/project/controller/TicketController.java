@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/ticket")
 public class TicketController {
     private final TicketService ticketService;
@@ -57,9 +58,6 @@ public class TicketController {
         if(creator == null){
             return new ResponseEntity<>("Incorrect sessionToken", HttpStatus.BAD_REQUEST);
         }
-        if(!ticketRequest.getCreator().getId().equals(creator.getId())){
-            return new ResponseEntity<>("Cannot create tickets to other users", HttpStatus.BAD_REQUEST);
-        }
         if(!ticketService.checkTitle(ticketRequest.getTitle()).equals("")){
             return new ResponseEntity<>(ticketService.checkTitle(ticketRequest.getTitle()), HttpStatus.BAD_REQUEST);
         }
@@ -91,23 +89,23 @@ public class TicketController {
         if(toBeDeleted == null){
             return new ResponseEntity<>("Incorrect id", HttpStatus.NOT_FOUND);
         }
-        if(!id.equals(creator.getId())){
+        if(!toBeDeleted.getCreator().getId().equals(creator.getId())){
             return new ResponseEntity<>("You can delete only your tickets", HttpStatus.BAD_REQUEST);
         }
         ticketService.deleteTicket(toBeDeleted);
         return new ResponseEntity<>("Ticket with id: " + toBeDeleted.getId() + " deleted", HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest, @RequestHeader("session-token") String sessionToken) {
         User creator = userService.findUser(sessionToken);
         if(creator == null){
             return new ResponseEntity<>("Incorrect sessionToken", HttpStatus.BAD_REQUEST);
         }
-        if(!ticketRequest.getCreator().getId().equals(creator.getId())){
+        Ticket ticket = ticketService.findTicketByTitle(ticketRequest.getTitle());
+        if(!ticket.getCreator().getId().equals(creator.getId())){
             return new ResponseEntity<>("You can update only your tickets", HttpStatus.BAD_REQUEST);
         }
-        Ticket ticket = ticketService.findTicketByTitle(ticketRequest.getTitle());
         try{
             ticket.setDescription(ticketRequest.getDescription());
             ticket.setDueDate(ticketRequest.getDueDate());
