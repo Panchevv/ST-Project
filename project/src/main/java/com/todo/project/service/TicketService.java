@@ -7,12 +7,19 @@ import java.util.List;
 
 public interface TicketService {
 
-    void createTicket(Ticket ticket, User createdBy);
+    void createTicket(Ticket ticket);
 
     void updateTicket(Ticket ticket);
 
-    List<Ticket> findTickets(Integer userId);
+    void deleteTicket(Ticket ticket);
 
-    Ticket saveTicker(Ticket ticket);
+    List<Ticket> findTicketsByCreator(User user);
 
+    Ticket findTicketById(Long ticketId);
+
+    List<Ticket> getAllTickets();
+
+    Ticket findTicketByTitle(String title);
+
+    String checkTitle(String title);
 }

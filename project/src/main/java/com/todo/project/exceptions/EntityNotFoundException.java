@@ -1,7 +1,7 @@
 package com.todo.project.exceptions;
 
 public class EntityNotFoundException extends RuntimeException{
-    public EntityNotFoundException(String type, int id) {
+    public EntityNotFoundException(String type, Long id) {
         this(type, "id", String.valueOf(id));
     }
 

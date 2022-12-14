@@ -1,22 +1,18 @@
 package com.todo.project.persistence.repository;
 
 import com.todo.project.persistence.model.Ticket;
+import com.todo.project.persistence.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface TicketRepository{
-    List<Ticket> getAll();
+public interface TicketRepository extends JpaRepository<Ticket, Long>{
 
-    Ticket getTicketsById(int ticketId);
+    Ticket findTicketById(Long ticketId);
 
-    List<Ticket> getTicketsFromUser(int userId);
+    List<Ticket> findTicketByCreator(User user);
 
-    void create(Ticket ticket);
-
-    void update(Ticket ticket);
-
-    void delete(Ticket ticket);
+    Ticket findTicketByTitle(String title);
 }
 
 

@@ -3,6 +3,7 @@ package com.todo.project.persistence.model;
 import javax.persistence.*;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
@@ -40,8 +41,12 @@ public class User {
     @NotNull
     private String email;
 
+    @Column(name = "is_admin")
+    @NotNull
+    private Boolean isAdmin;
+
     @OneToMany(mappedBy = "creator")
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Ticket> tickets;
 
     public User() {}
@@ -52,4 +57,5 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
 }

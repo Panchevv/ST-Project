@@ -4,6 +4,8 @@ import javax.persistence.*;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -22,16 +24,27 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name="creator")
-    @JsonBackReference
+    @JsonManagedReference
     private User creator;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "title")
+    @NotNull
     private String title;
 
     @Column(name = "dueDate")
     private Date dueDate;
+
+    public Ticket(){
+
+    }
+    public Ticket(User creator, String title, String description, Date dueDate){
+        this.creator = creator;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+    }
 
 }

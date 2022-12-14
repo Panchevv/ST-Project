@@ -1,5 +1,6 @@
 package com.todo.project.service.impl;
 
+import com.todo.project.exceptions.EntityNotFoundException;
 import com.todo.project.exceptions.UserAuthenticationException;
 import com.todo.project.persistence.model.User;
 import com.todo.project.persistence.repository.UserRepository;
@@ -21,6 +22,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user){
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUser(User user){
+        if(user.getId() == null){
+            throw new EntityNotFoundException("User", user.getId());
+        }
         userRepository.save(user);
     }
 
