@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -46,7 +47,7 @@ public class User {
 
     @OneToMany(mappedBy = "creator",cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private Set<Ticket> tickets;
+    private List<Ticket> tickets;
 
     public User() {}
 
