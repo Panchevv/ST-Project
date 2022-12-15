@@ -3,8 +3,6 @@ package com.todo.project.persistence.model;
 import javax.persistence.*;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,7 +22,6 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name="creator")
-    @JsonManagedReference
     private User creator;
 
     @Column(name = "description")
@@ -46,5 +43,4 @@ public class Ticket {
         this.description = description;
         this.dueDate = dueDate;
     }
-
 }

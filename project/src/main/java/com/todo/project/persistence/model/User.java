@@ -3,8 +3,7 @@ package com.todo.project.persistence.model;
 import javax.persistence.*;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -45,8 +44,8 @@ public class User {
     @NotNull
     private Boolean isAdmin;
 
-    @OneToMany(mappedBy = "creator")
-    @JsonBackReference
+    @OneToMany(mappedBy = "creator",cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<Ticket> tickets;
 
     public User() {}
