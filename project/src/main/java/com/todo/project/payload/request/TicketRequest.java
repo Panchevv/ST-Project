@@ -11,6 +11,5 @@ public class TicketRequest {
     private String title;
     private String description;
     private Date dueDate;
-
-
+    private boolean isCompleted;
 }
