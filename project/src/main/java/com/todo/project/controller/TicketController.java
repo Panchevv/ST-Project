@@ -109,6 +109,7 @@ public class TicketController {
         try{
             ticket.setDescription(ticketRequest.getDescription());
             ticket.setDueDate(ticketRequest.getDueDate());
+            ticket.setCompleted(ticketRequest.isCompleted());
             ticketService.updateTicket(ticket);
             return new ResponseEntity<>("Ticket is saved", HttpStatus.OK);
         }

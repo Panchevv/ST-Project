@@ -34,6 +34,9 @@ public class Ticket {
     @Column(name = "dueDate")
     private Date dueDate;
 
+    @Column(name = "isCompleted")
+    private boolean isCompleted;
+
     public Ticket(){
 
     }
@@ -42,5 +45,6 @@ public class Ticket {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        this.isCompleted = false;
     }
 }

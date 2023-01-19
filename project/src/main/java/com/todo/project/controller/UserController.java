@@ -196,4 +196,13 @@ public class UserController {
         }
         return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> getUserCompletedCount(@RequestHeader("session-token") String sessionToken){
+        User user = userService.findUser(sessionToken);
+        if(user == null){
+            return new ResponseEntity<>("Incorrect sessionToken.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Total completed tasks: " + ticketService.getUserCompletedCount(user), HttpStatus.OK);
+    }
 }
