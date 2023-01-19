@@ -65,4 +65,9 @@ public class TicketServiceImpl implements TicketService {
         }
         return message;
     }
+
+    @Override
+    public int getUserCompletedCount(User user) {
+        return ticketRepository.countTicketsByCreatorAndIsCompleted(user, true);
+    }
 }

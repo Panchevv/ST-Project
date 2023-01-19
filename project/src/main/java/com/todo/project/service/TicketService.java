@@ -22,4 +22,6 @@ public interface TicketService {
     Ticket findTicketByTitle(String title);
 
     String checkTitle(String title);
+
+    int getUserCompletedCount(User user);
 }
