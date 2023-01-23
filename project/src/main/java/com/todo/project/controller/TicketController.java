@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -50,6 +51,21 @@ public class TicketController {
             return new ResponseEntity<>("Incorrect id.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(ticket,HttpStatus.OK);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<?> fetchStatistic(){
+        List<Ticket> tickets = ticketService.getAllTickets();
+
+        int doneCounter = 0;
+        Date now = new Date();
+
+        for (Ticket ticket: tickets) {
+            if (ticket.getDueDate().compareTo(now) < 0)
+                doneCounter++;
+        }
+
+        return ResponseEntity.ok("Done tasks " + doneCounter + ", out of " + tickets.size());
     }
 
     @PostMapping("/create")

@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import "../styles/App.scss";
 import StatusLine from "./StatusLine";
+import { fetchStatistics } from "../api";
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [statistic, setStatistic] = useState("")
+
+  const statistics = async () => {
+    setStatistic(await fetchStatistics())
+  }
 
   useEffect(() => {
     loadTasksFromLocalStorage();
+    statistics();
   }, []);
 
   function addEmptyTask(status) {
@@ -114,6 +121,7 @@ function App() {
             status="Done"
           />
         </section>
+        <p>{ statistic }</p>
       </main>
     </div>
   );
